@@ -6,13 +6,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Question, AnalysisResult } from '@/lib/types';
 
-const CATEGORY_COLORS: Record<string, string> = {
-  '技術的質問': 'bg-blue-100 text-blue-800',
-  '意見・感想': 'bg-green-100 text-green-800',
-  '要望・提案': 'bg-purple-100 text-purple-800',
-  'その他': 'bg-gray-100 text-gray-800',
-};
-
 export default function AdminPage() {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [analysis, setAnalysis] = useState<AnalysisResult | null>(null);
@@ -146,57 +139,97 @@ export default function AdminPage() {
         </Card>
 
         {analysis && (
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                🤖 AI分析結果
-                <span className="text-sm font-normal text-gray-500">
-                  {formatTime(analysis.analyzedAt)}
-                </span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div>
-                <h3 className="font-semibold text-gray-700 mb-2">📊 要約</h3>
-                <p className="text-gray-900 bg-blue-50 p-4 rounded-lg">
-                  {analysis.summary}
-                </p>
-              </div>
+          <>
+            {/* 要約セクション */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  🤖 AI分析結果
+                  <span className="text-sm font-normal text-gray-500">
+                    {formatTime(analysis.analyzedAt)}
+                  </span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div>
+                  <h3 className="font-semibold text-gray-700 mb-2">📊 全体サマリー</h3>
+                  <p className="text-gray-900 bg-blue-50 p-4 rounded-lg leading-relaxed">
+                    {analysis.summary}
+                  </p>
+                </div>
 
-              <div>
-                <h3 className="font-semibold text-gray-700 mb-3">📂 カテゴリ分類</h3>
-                <div className="space-y-4">
-                  {analysis.categories.map((cat, i) => (
-                    <div key={i} className="border rounded-lg p-4">
-                      <div className="flex items-center gap-2 mb-2">
+                {analysis.keyInsights && analysis.keyInsights.length > 0 && (
+                  <div>
+                    <h3 className="font-semibold text-gray-700 mb-2">💡 主な気づき</h3>
+                    <ul className="space-y-2">
+                      {analysis.keyInsights.map((insight, i) => (
+                        <li
+                          key={i}
+                          className="flex items-start gap-2 text-gray-700 bg-yellow-50 p-3 rounded-lg"
+                        >
+                          <span className="text-yellow-600 font-bold">{i + 1}.</span>
+                          <span>{insight}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* 重要質問 + 専門家回答セクション */}
+            {analysis.pickedQuestions && analysis.pickedQuestions.length > 0 && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>🎯 重要な質問と専門家回答</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  {analysis.pickedQuestions.map((pq, i) => (
+                    <div
+                      key={pq.question.id}
+                      className={`border-2 rounded-lg p-5 ${
+                        pq.importance === 'high'
+                          ? 'border-red-200 bg-red-50/30'
+                          : 'border-orange-200 bg-orange-50/30'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2 mb-3">
                         <Badge
                           className={
-                            CATEGORY_COLORS[cat.name] || CATEGORY_COLORS['その他']
+                            pq.importance === 'high'
+                              ? 'bg-red-100 text-red-800'
+                              : 'bg-orange-100 text-orange-800'
                           }
                         >
-                          {cat.name}
+                          {pq.importance === 'high' ? '重要度：高' : '重要度：中'}
                         </Badge>
-                        <span className="text-sm text-gray-500">
-                          {cat.questions.length}件
-                        </span>
+                        <span className="text-xs text-gray-500">Q{i + 1}</span>
                       </div>
-                      <p className="text-sm text-gray-600 mb-3">{cat.insight}</p>
-                      <ul className="space-y-2">
-                        {cat.questions.map((q) => (
-                          <li
-                            key={q.id}
-                            className="text-sm text-gray-700 pl-3 border-l-2 border-gray-200"
-                          >
-                            {q.content}
-                          </li>
-                        ))}
-                      </ul>
+
+                      <div className="mb-4">
+                        <p className="text-lg font-medium text-gray-900 mb-1">
+                          「{pq.question.content}」
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          選定理由：{pq.reason}
+                        </p>
+                      </div>
+
+                      <div className="bg-white rounded-lg p-4 border border-gray-200">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-lg">🧑‍💼</span>
+                          <span className="font-semibold text-blue-800">AI専門家の回答</span>
+                        </div>
+                        <p className="text-gray-800 leading-relaxed whitespace-pre-wrap">
+                          {pq.expertAnswer}
+                        </p>
+                      </div>
                     </div>
                   ))}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+                </CardContent>
+              </Card>
+            )}
+          </>
         )}
       </div>
     </main>

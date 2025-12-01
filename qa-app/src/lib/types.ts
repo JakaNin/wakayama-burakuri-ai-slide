@@ -5,14 +5,23 @@ export interface Question {
   category?: string;
 }
 
-export interface CategoryResult {
-  name: string;
-  questions: Question[];
-  insight: string;
+export interface PickedQuestion {
+  question: Question;
+  importance: 'high' | 'medium';
+  reason: string;
+  expertAnswer: string;
 }
 
 export interface AnalysisResult {
   summary: string;
-  categories: CategoryResult[];
+  keyInsights: string[];
+  pickedQuestions: PickedQuestion[];
   analyzedAt: number;
+}
+
+// Legacy types (kept for compatibility)
+export interface CategoryResult {
+  name: string;
+  questions: Question[];
+  insight: string;
 }
