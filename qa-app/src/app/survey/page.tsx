@@ -3,16 +3,32 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
+import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+
+const AGE_GROUPS = [
+  '20代',
+  '30代',
+  '40代',
+  '50代',
+  '60代',
+  '70代以上',
+];
 
 const INDUSTRIES = [
   '観光・宿泊・飲食',
   '農業・水産・食品加工',
   '製造業',
-  '小売・卸売・サービス',
+  '小売・卸売',
+  'サービス業',
   '建設・不動産',
-  '金融・保険・士業',
-  '行政・公務員・NPO',
+  '金融・保険',
+  '士業（税理士・弁護士等）',
+  '医療・福祉',
+  '教育・学校',
+  'IT・通信',
+  '行政・公務員',
+  'NPO・団体',
   'その他',
 ];
 
@@ -46,7 +62,9 @@ const AI_INTERESTS = [
 ];
 
 export default function SurveyPage() {
+  const [ageGroup, setAgeGroup] = useState('');
   const [industry, setIndustry] = useState('');
+  const [industryOther, setIndustryOther] = useState('');
   const [position, setPosition] = useState('');
   const [challenges, setChallenges] = useState<string[]>([]);
   const [question, setQuestion] = useState('');
@@ -66,8 +84,13 @@ export default function SurveyPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!industry || !position || challenges.length === 0 || !aiInterest) {
+    if (!ageGroup || !industry || !position || challenges.length === 0 || !aiInterest) {
       setError('必須項目を入力してください');
+      return;
+    }
+
+    if (industry === 'その他' && !industryOther.trim()) {
+      setError('業種（その他）を入力してください');
       return;
     }
 
@@ -79,7 +102,9 @@ export default function SurveyPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          ageGroup,
           industry,
+          industryOther: industry === 'その他' ? industryOther.trim() : undefined,
           position,
           challenges,
           question: question.trim(),
@@ -133,10 +158,33 @@ export default function SurveyPage() {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Q1: 業種 */}
+              {/* Q1: 年代 */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Q1. お仕事・活動の分野 <span className="text-red-500">*</span>
+                  Q1. 年代 <span className="text-red-500">*</span>
+                </label>
+                <div className="grid grid-cols-3 gap-2">
+                  {AGE_GROUPS.map((age) => (
+                    <button
+                      key={age}
+                      type="button"
+                      onClick={() => setAgeGroup(age)}
+                      className={`p-3 text-sm rounded-lg border transition-all ${
+                        ageGroup === age
+                          ? 'bg-blue-600 text-white border-blue-600'
+                          : 'bg-white text-gray-700 border-gray-300 hover:border-blue-400'
+                      }`}
+                    >
+                      {age}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Q2: 業種 */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Q2. お仕事・活動の分野 <span className="text-red-500">*</span>
                 </label>
                 <div className="grid grid-cols-2 gap-2">
                   {INDUSTRIES.map((ind) => (
@@ -154,12 +202,21 @@ export default function SurveyPage() {
                     </button>
                   ))}
                 </div>
+                {industry === 'その他' && (
+                  <Input
+                    type="text"
+                    placeholder="具体的な業種を入力してください"
+                    value={industryOther}
+                    onChange={(e) => setIndustryOther(e.target.value)}
+                    className="mt-2"
+                  />
+                )}
               </div>
 
-              {/* Q2: 立場 */}
+              {/* Q3: 立場 */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Q2. お立場 <span className="text-red-500">*</span>
+                  Q3. お立場 <span className="text-red-500">*</span>
                 </label>
                 <div className="grid grid-cols-2 gap-2">
                   {POSITIONS.map((pos) => (
@@ -179,10 +236,10 @@ export default function SurveyPage() {
                 </div>
               </div>
 
-              {/* Q3: 課題（複数選択） */}
+              {/* Q4: 課題（複数選択） */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Q3. 地域やお仕事で感じている課題（複数選択可）<span className="text-red-500">*</span>
+                  Q4. 地域やお仕事で感じている課題（複数選択可）<span className="text-red-500">*</span>
                 </label>
                 <div className="grid grid-cols-2 gap-2">
                   {CHALLENGES.map((ch) => (
@@ -202,10 +259,10 @@ export default function SurveyPage() {
                 </div>
               </div>
 
-              {/* Q4: 聞きたいこと */}
+              {/* Q5: 聞きたいこと */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Q4. 本イベントで聞きたいこと・期待すること（任意）
+                  Q5. 本イベントで聞きたいこと・期待すること（任意）
                 </label>
                 <Textarea
                   placeholder="AIについて知りたいこと、解決したい課題など..."
@@ -215,10 +272,10 @@ export default function SurveyPage() {
                 />
               </div>
 
-              {/* Q5: AIへの関心度 */}
+              {/* Q6: AIへの関心度 */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Q5. AIへの関心度 <span className="text-red-500">*</span>
+                  Q6. AIへの関心度 <span className="text-red-500">*</span>
                 </label>
                 <div className="grid grid-cols-2 gap-2">
                   {AI_INTERESTS.map((interest) => (

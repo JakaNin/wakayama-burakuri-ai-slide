@@ -129,7 +129,8 @@ export default function SurveyAdminPage() {
                     className="p-4 bg-white rounded-lg border border-gray-200"
                   >
                     <div className="flex flex-wrap gap-2 mb-2">
-                      <Badge variant="outline">{r.industry}</Badge>
+                      <Badge variant="outline">{r.ageGroup}</Badge>
+                      <Badge variant="outline">{r.industryOther || r.industry}</Badge>
                       <Badge variant="outline">{r.position}</Badge>
                       <Badge variant="secondary">{r.aiInterest}</Badge>
                     </div>
@@ -161,23 +162,52 @@ export default function SurveyAdminPage() {
         {/* 分析結果 */}
         {analysis && (
           <>
+            {/* 開会用サマリー */}
+            {analysis.openingSummary && (
+              <Card className="border-2 border-yellow-300 bg-yellow-50">
+                <CardHeader>
+                  <CardTitle>🎤 開会用サマリー（そのまま読めます）</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-lg text-gray-900 leading-relaxed">
+                    {analysis.openingSummary}
+                  </p>
+                </CardContent>
+              </Card>
+            )}
+
             {/* 参加者プロファイル */}
             <Card>
               <CardHeader>
                 <CardTitle>📊 参加者プロファイル</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="grid md:grid-cols-3 gap-4">
-                  {/* 業種分布 */}
+                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {/* 年代分布 */}
                   <div>
-                    <h4 className="font-semibold text-gray-700 mb-2">業種</h4>
+                    <h4 className="font-semibold text-gray-700 mb-2">年代</h4>
                     <ul className="space-y-1">
-                      {analysis.profileSummary.industryDistribution.map((d) => (
+                      {analysis.profileSummary.ageDistribution.map((d) => (
                         <li
                           key={d.name}
                           className="flex justify-between text-sm"
                         >
                           <span>{d.name}</span>
+                          <span className="text-gray-500">{d.count}名</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  {/* 業種分布 */}
+                  <div>
+                    <h4 className="font-semibold text-gray-700 mb-2">業種</h4>
+                    <ul className="space-y-1">
+                      {analysis.profileSummary.industryDistribution.slice(0, 5).map((d) => (
+                        <li
+                          key={d.name}
+                          className="flex justify-between text-sm"
+                        >
+                          <span className="truncate">{d.name}</span>
                           <span className="text-gray-500">{d.count}名</span>
                         </li>
                       ))}
@@ -210,7 +240,7 @@ export default function SurveyAdminPage() {
                             key={d.name}
                             className="flex justify-between text-sm"
                           >
-                            <span>{d.name}</span>
+                            <span className="truncate">{d.name}</span>
                             <span className="text-gray-500">{d.count}名</span>
                           </li>
                         )
@@ -289,11 +319,56 @@ export default function SurveyAdminPage() {
               </CardContent>
             </Card>
 
+            {/* クロス分析：興味深い発見 */}
+            {analysis.crossAnalysis.interestingFindings.length > 0 && (
+              <Card className="border-2 border-purple-200">
+                <CardHeader>
+                  <CardTitle>🔍 興味深い発見（クロス分析）</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-3">
+                    {analysis.crossAnalysis.interestingFindings.map((finding, i) => (
+                      <li
+                        key={i}
+                        className="flex items-start gap-3 bg-purple-50 p-4 rounded-lg"
+                      >
+                        <span className="text-purple-600 font-bold text-lg">
+                          {i + 1}.
+                        </span>
+                        <span className="text-gray-800">{finding}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* 印象的なコメント */}
+            {analysis.notableComments && analysis.notableComments.length > 0 && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>💬 印象的なコメント（生の声）</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-2">
+                    {analysis.notableComments.map((comment, i) => (
+                      <li
+                        key={i}
+                        className="bg-gray-50 p-3 rounded-lg text-gray-700 italic"
+                      >
+                        「{comment}」
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            )}
+
             {/* 代表質問と専門家回答 */}
             {analysis.representativeQuestions.length > 0 && (
               <Card>
                 <CardHeader>
-                  <CardTitle>💬 代表質問と専門家回答</CardTitle>
+                  <CardTitle>❓ 代表質問と専門家回答</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   {analysis.representativeQuestions.map((rq, i) => (
@@ -328,35 +403,6 @@ export default function SurveyAdminPage() {
                           {rq.expertAnswer}
                         </p>
                       </div>
-                    </div>
-                  ))}
-                </CardContent>
-              </Card>
-            )}
-
-            {/* 登壇者へのフィードバック */}
-            {analysis.speakerFeedback.length > 0 && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>🎤 登壇者へのフィードバック</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {analysis.speakerFeedback.map((sf, i) => (
-                    <div
-                      key={i}
-                      className="bg-green-50 border border-green-200 rounded-lg p-4"
-                    >
-                      <h4 className="font-semibold text-green-900 mb-2">
-                        {sf.speaker}
-                      </h4>
-                      <ul className="space-y-1">
-                        {sf.suggestions.map((s, j) => (
-                          <li key={j} className="flex items-start gap-2 text-gray-700">
-                            <span className="text-green-600">•</span>
-                            <span>{s}</span>
-                          </li>
-                        ))}
-                      </ul>
                     </div>
                   ))}
                 </CardContent>

@@ -33,7 +33,9 @@ export interface CategoryResult {
 export interface SurveyResponse {
   id: string;
   timestamp: number;
+  ageGroup: string;        // 年代
   industry: string;        // 業種
+  industryOther?: string;  // 業種（その他の場合）
   position: string;        // 立場
   challenges: string[];    // 課題（複数選択）
   question: string;        // 聞きたいこと（自由記述）
@@ -47,10 +49,18 @@ export interface RepresentativeQuestion {
   expertAnswer: string;    // 専門家回答
 }
 
+export interface CrossAnalysisItem {
+  category: string;
+  items: { name: string; count: number }[];
+}
+
 export interface SurveyAnalysis {
+  // 開会用サマリー（そのまま読める形）
+  openingSummary: string;
   // 参加者プロファイル
   profileSummary: {
     totalResponses: number;
+    ageDistribution: { name: string; count: number }[];
     industryDistribution: { name: string; count: number }[];
     positionDistribution: { name: string; count: number }[];
     aiInterestDistribution: { name: string; count: number }[];
@@ -60,13 +70,17 @@ export interface SurveyAnalysis {
     ranking: { challenge: string; count: number; percentage: number }[];
     insights: string[];
   };
+  // クロス分析（興味深い切り口）
+  crossAnalysis: {
+    ageVsAiInterest: CrossAnalysisItem[];    // 年代×AI関心度
+    ageVsChallenges: CrossAnalysisItem[];    // 年代×課題
+    industryVsChallenges: CrossAnalysisItem[]; // 業種×課題
+    interestingFindings: string[];            // 意外な発見・面白いインサイト
+  };
   // 代表質問と専門家回答
   representativeQuestions: RepresentativeQuestion[];
-  // 登壇者へのフィードバック
-  speakerFeedback: {
-    speaker: string;
-    suggestions: string[];
-  }[];
+  // 印象的な生の声（抜粋）
+  notableComments: string[];
   // 分析日時
   analyzedAt: number;
 }

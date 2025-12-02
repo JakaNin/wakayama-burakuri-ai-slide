@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import Anthropic from '@anthropic-ai/sdk';
 import { getSurveyResponses, saveSurveyAnalysis } from '@/lib/store';
-import { SurveyAnalysis, SurveyResponse } from '@/lib/types';
+import { SurveyAnalysis, SurveyResponse, CrossAnalysisItem } from '@/lib/types';
 
 const anthropic = new Anthropic();
 
@@ -12,7 +12,9 @@ function calculateDistribution(
   const counts: Record<string, number> = {};
   for (const r of responses) {
     const value = r[field] as string;
-    counts[value] = (counts[value] || 0) + 1;
+    if (value) {
+      counts[value] = (counts[value] || 0) + 1;
+    }
   }
   return Object.entries(counts)
     .map(([name, count]) => ({ name, count }))
@@ -38,6 +40,42 @@ function calculateChallengeRanking(
     .sort((a, b) => b.count - a.count);
 }
 
+// クロス分析: カテゴリ別の分布を計算
+function calculateCrossAnalysis(
+  responses: SurveyResponse[],
+  categoryField: keyof SurveyResponse,
+  valueField: keyof SurveyResponse | 'challenges'
+): CrossAnalysisItem[] {
+  const result: Record<string, Record<string, number>> = {};
+
+  for (const r of responses) {
+    const category = r[categoryField] as string;
+    if (!category) continue;
+
+    if (!result[category]) {
+      result[category] = {};
+    }
+
+    if (valueField === 'challenges') {
+      for (const challenge of r.challenges) {
+        result[category][challenge] = (result[category][challenge] || 0) + 1;
+      }
+    } else {
+      const value = r[valueField] as string;
+      if (value) {
+        result[category][value] = (result[category][value] || 0) + 1;
+      }
+    }
+  }
+
+  return Object.entries(result).map(([category, items]) => ({
+    category,
+    items: Object.entries(items)
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count),
+  }));
+}
+
 export async function POST() {
   try {
     const responses = await getSurveyResponses();
@@ -50,34 +88,48 @@ export async function POST() {
     }
 
     // 統計データを計算
+    const ageDistribution = calculateDistribution(responses, 'ageGroup');
     const industryDistribution = calculateDistribution(responses, 'industry');
     const positionDistribution = calculateDistribution(responses, 'position');
     const aiInterestDistribution = calculateDistribution(responses, 'aiInterest');
     const challengeRanking = calculateChallengeRanking(responses);
+
+    // クロス分析
+    const ageVsAiInterest = calculateCrossAnalysis(responses, 'ageGroup', 'aiInterest');
+    const ageVsChallenges = calculateCrossAnalysis(responses, 'ageGroup', 'challenges');
+    const industryVsChallenges = calculateCrossAnalysis(responses, 'industry', 'challenges');
 
     // 自由記述の質問を抽出
     const freeQuestions = responses
       .filter((r) => r.question && r.question.trim().length > 0)
       .map((r) => ({
         question: r.question,
+        ageGroup: r.ageGroup,
         industry: r.industry,
+        industryOther: r.industryOther,
         challenges: r.challenges,
       }));
 
     // AIに分析させるデータを準備
     const analysisData = {
       totalResponses: responses.length,
+      ageDistribution,
       industryDistribution,
       positionDistribution,
       aiInterestDistribution,
       challengeRanking,
+      crossAnalysis: {
+        ageVsAiInterest,
+        ageVsChallenges,
+        industryVsChallenges,
+      },
       freeQuestions,
     };
 
     const prompt = `あなたはAI・テクノロジーの専門家であり、地方創生にも詳しいコンサルタントです。
 
 以下は「AIの進化と地方創生 〜和歌山の未来をひらく〜」というイベントの事前アンケート結果です。
-参加者は和歌山大学経済学部OB、地域ビジネス関係者（30-80歳、非IT多め）です。
+参加者は和歌山大学経済学部OB、地域ビジネス関係者です。
 
 【アンケート結果】
 ${JSON.stringify(analysisData, null, 2)}
@@ -85,8 +137,12 @@ ${JSON.stringify(analysisData, null, 2)}
 このデータを分析し、以下の形式でJSON形式で回答してください：
 
 {
+  "openingSummary": "開会で司会者がそのまま読める1-2文のサマリー。例：「本日の参加者は〇〇代の方が多く、〇〇業を中心に、△△に関心が高い方々にお集まりいただきました」",
   "challengeInsights": [
     "課題傾向から読み取れるインサイトを3つ程度"
+  ],
+  "interestingFindings": [
+    "クロス分析から発見した興味深いインサイトを3-5つ。例：「60代以上はAIに期待している人が多いが、30代は不安を感じている人が多い」「観光業は外国人対応、農業は担い手不足が突出して課題に挙がっている」など、データから読み取れる意外な発見や面白い傾向"
   ],
   "representativeQuestions": [
     {
@@ -96,23 +152,14 @@ ${JSON.stringify(analysisData, null, 2)}
       "expertAnswer": "AI・地方創生の専門家として、一般ビジネスパーソンにもわかりやすく回答（3-5文）。専門用語は避けるか、使う場合は簡単な説明を添える。和歌山の文脈を意識した具体例があるとなお良い。"
     }
   ],
-  "speakerFeedback": [
-    {
-      "speaker": "樫本さん（地域コミュニティ研究）",
-      "suggestions": ["プレゼンで強調すべきポイント2-3個"]
-    },
-    {
-      "speaker": "西山さん（AI実践デモ）",
-      "suggestions": ["デモで取り上げると響くテーマ2-3個"]
-    },
-    {
-      "speaker": "中村さん（AI開発・可能性）",
-      "suggestions": ["参加者に響きそうなポイント2-3個"]
-    }
+  "notableComments": [
+    "自由記述から印象的なコメントを3-5つ抜粋（原文のまま）。なければ空配列"
   ]
 }
 
 注意点：
+- openingSummaryは司会者が開会であいさつ時にそのまま読める文章にしてください
+- interestingFindingsはクロス分析データをしっかり見て、年代別・業種別の違いを具体的に指摘してください
 - representativeQuestionsは、自由記述の質問と選択された課題の傾向から、参加者の関心を代表する質問を5-7つ生成してください
 - 自由記述がない場合でも、選択された課題の傾向から代表質問を生成してください
 - expertAnswerは「です・ます調」で、親しみやすく丁寧に
@@ -141,8 +188,10 @@ ${JSON.stringify(analysisData, null, 2)}
     const parsed = JSON.parse(jsonMatch[0]);
 
     const analysis: SurveyAnalysis = {
+      openingSummary: parsed.openingSummary || '',
       profileSummary: {
         totalResponses: responses.length,
+        ageDistribution,
         industryDistribution,
         positionDistribution,
         aiInterestDistribution,
@@ -151,8 +200,14 @@ ${JSON.stringify(analysisData, null, 2)}
         ranking: challengeRanking,
         insights: parsed.challengeInsights || [],
       },
+      crossAnalysis: {
+        ageVsAiInterest,
+        ageVsChallenges,
+        industryVsChallenges,
+        interestingFindings: parsed.interestingFindings || [],
+      },
       representativeQuestions: parsed.representativeQuestions || [],
-      speakerFeedback: parsed.speakerFeedback || [],
+      notableComments: parsed.notableComments || [],
       analyzedAt: Date.now(),
     };
 

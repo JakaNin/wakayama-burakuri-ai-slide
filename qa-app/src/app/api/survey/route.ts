@@ -19,9 +19,9 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { industry, position, challenges, question, aiInterest } = body;
+    const { ageGroup, industry, industryOther, position, challenges, question, aiInterest } = body;
 
-    if (!industry || !position || !challenges || challenges.length === 0 || !aiInterest) {
+    if (!ageGroup || !industry || !position || !challenges || challenges.length === 0 || !aiInterest) {
       return NextResponse.json(
         { error: 'Required fields are missing' },
         { status: 400 }
@@ -31,7 +31,9 @@ export async function POST(request: NextRequest) {
     const response: SurveyResponse = {
       id: uuidv4(),
       timestamp: Date.now(),
+      ageGroup,
       industry,
+      industryOther: industryOther || undefined,
       position,
       challenges,
       question: question || '',
