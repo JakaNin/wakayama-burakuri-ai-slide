@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>和歌山ぶらくり会 『AI技術の進化と地方創生』</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+      line-height: 1.8;
+      color: #333;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      background: #fff;
+    }
+    h1 {
+      font-size: 1.8em;
+      color: #2c3e50;
+      border-bottom: 3px solid #3498db;
+      padding-bottom: 10px;
+      margin-bottom: 30px;
+    }
+    h2 {
+      font-size: 1.4em;
+      color: #2c3e50;
+      margin-top: 40px;
+      margin-bottom: 20px;
+      padding-left: 10px;
+      border-left: 4px solid #3498db;
+    }
+    h3 {
+      font-size: 1.1em;
+      color: #34495e;
+      margin-top: 25px;
+      margin-bottom: 15px;
+    }
+    p {
+      margin-bottom: 15px;
+      text-align: justify;
+    }
+    ul, ol {
+      margin-bottom: 15px;
+      padding-left: 25px;
+    }
+    li {
+      margin-bottom: 8px;
+    }
+    strong {
+      color: #2c3e50;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 0.95em;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px 12px;
+      text-align: left;
+    }
+    th {
+      background: #f8f9fa;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+    tr:nth-child(even) {
+      background: #fafafa;
+    }
+    blockquote {
+      background: #f8f9fa;
+      border-left: 4px solid #3498db;
+      padding: 15px 20px;
+      margin: 20px 0;
+      font-style: italic;
+    }
+    blockquote strong {
+      font-style: normal;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #eee;
+      margin: 30px 0;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 20px auto;
+      border-radius: 4px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .section-title {
+      background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+      color: white;
+      padding: 8px 15px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 15px;
+    }
+    .highlight {
+      background: #fff3cd;
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+    .footer {
+      margin-top: 50px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+      font-size: 0.9em;
+      color: #666;
+      text-align: center;
+    }
+    @media print {
+      body {
+        padding: 20px;
+        font-size: 11pt;
+      }
+      h1 { font-size: 16pt; }
+      h2 { font-size: 13pt; page-break-after: avoid; }
+      h3 { font-size: 11pt; page-break-after: avoid; }
+      table { font-size: 10pt; }
+      img { max-width: 80%; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>和歌山ぶらくり会 『AI技術の進化と地方創生』</h1>
+
+<hr>
+
+<h2>生成AIとは何か</h2>
+
+<h3>従来のAIと何が違う？</h3>
+
+<p><strong>従来のAI</strong></p>
+<ul>
+  <li>データを「分類」する</li>
+  <li>例：スパムメールを検出する、写真に写っているのが犬か猫か判定する</li>
+  <li>人間が設定したルールに従って判断</li>
+</ul>
+
+<p><strong>生成AI</strong></p>
+<ul>
+  <li>新しいコンテンツを「創造」する</li>
+  <li>例：文章を書く、画像を描く、プログラムを生成する</li>
+  <li>人間との自然な対話が可能</li>
+</ul>
+
+<p>つまり、AIは「判定する機械」から「創造する機械」に進化しました。</p>
+
+<hr>
+
+<h3>生成AIはいつから？</h3>
+
+<p>生成AI（文章や画像を作るAI）自体は2010年代から存在していました。ただし当時は品質が低く、「AIが作った感」が明らかでした。</p>
+
+<p>転機は2020年のGPT-3。「スケーリング則」——大きくすれば賢くなる——が実証され、人間が書いたような自然な文章を生成できるようになりました。</p>
+
+<p>そして2022年11月、ChatGPTとして無料公開。誰でも触れるようになり、社会現象となりました。</p>
+
+<hr>
+
+<h3>なぜ急に賢くなったのか</h3>
+
+<p>2つのブレークスルーがありました。</p>
+
+<p><strong>1. Transformer（2017年）— 技術的基盤</strong></p>
+<p>Googleが発表した新しいAI構造。文脈全体を一度に見渡せる仕組みにより、AIの大規模化が技術的に可能になりました。</p>
+
+<p><strong>2. スケーリング則の発見（2020年頃）— 経験則</strong></p>
+<p>「パラメータ・データ・計算量を増やすと、性能が予測可能に向上し続ける」という法則が発見されました。それまでのAIは規模を大きくしても性能が頭打ちになっていましたが、Transformerベースでは違いました。</p>
+
+<table>
+  <tr><th>年</th><th>モデル</th><th>パラメータ数</th><th>性能の変化</th></tr>
+  <tr><td>2018</td><td>GPT-1</td><td>1.2億</td><td>基本的な文章生成</td></tr>
+  <tr><td>2020</td><td>GPT-3</td><td>1,750億</td><td>対話・推論が可能に</td></tr>
+  <tr><td>2023</td><td>GPT-4</td><td>推定1.8兆</td><td>専門知識・複雑な推論</td></tr>
+</table>
+
+<p>パラメータ数が1000倍になると、突然「質的に異なる能力」が現れる。これを研究者は「創発」と呼んでいます。</p>
+
+<hr>
+
+<h3>正直に言うと：なぜうまくいくのかは謎</h3>
+
+<p>驚くかもしれませんが、<strong>なぜこれほどうまく動くのか、科学者も完全には理解していません</strong>。</p>
+
+<p>わかっていること：</p>
+<ul>
+  <li>大規模化すると性能が向上する（実験的事実）</li>
+  <li>膨大なデータからパターンを学習している</li>
+</ul>
+
+<p>わかっていないこと：</p>
+<ul>
+  <li>なぜスケールアップで突然新しい能力が出現するのか</li>
+  <li>内部でどのように「理解」しているのか</li>
+</ul>
+
+<p>完全に理解されていないが、実用性は証明済み。飛行機が飛ぶ原理を完全に理解していなくても飛行機に乗るように、私たちはAIを使い始めています。</p>
+
+<hr>
+
+<h2>【豆知識】なぜAIは毎回違う答えを返すのか</h2>
+
+<p>ChatGPTに同じ質問をしても、返ってくる答えは毎回微妙に違います。なぜでしょうか？</p>
+
+<p>生成AIは、次の単語を「確率」で予測しています。</p>
+
+<p>例：「猫が魚を」の次に来る単語は？</p>
+<ul>
+  <li>食べた：45%</li>
+  <li>見た：20%</li>
+  <li>狙った：15%</li>
+  <li>...</li>
+</ul>
+
+<p>AIはこの確率に応じて<strong>ランダムに選択</strong>します。だから毎回少し違う表現になる。</p>
+
+<p>ポイント：「ランダム」だが「でたらめ」ではない。学習した知識に基づく確率的選択です。これにより、AIは自然で多様な文章を生成できます。</p>
+
+<hr>
+
+<h2>知っておきたい基礎用語</h2>
+
+<p>暗記する必要はありません。講演中に出てきたら「あ、これか」と思い出せれば十分です。</p>
+
+<h3>パラメータ（Parameter）</h3>
+<ul>
+  <li>AIの「脳の神経回路」のようなもの</li>
+  <li>学習によって調整される数値の総数</li>
+  <li>OpenAIやGoogleが事前に学習済み → 私たちは使うだけ</li>
+</ul>
+
+<h3>プロンプト（Prompt）</h3>
+<ul>
+  <li>AIへの指示文・質問文のこと</li>
+  <li>「〇〇について教えて」「△△を作って」という入力</li>
+  <li><strong>私たちが工夫できる唯一の部分</strong></li>
+</ul>
+
+<h3>コンテクスト（Context）</h3>
+<ul>
+  <li>AIに渡す文脈情報</li>
+  <li>「あなたは〇〇の専門家です」といった設定</li>
+  <li>長いほど精度が上がるが、限界がある</li>
+</ul>
+
+<h3>ハルシネーション（Hallucination）</h3>
+<ul>
+  <li>AIが「もっともらしい嘘」を生成すること</li>
+  <li>存在しない事実、架空の引用などを作り出す</li>
+  <li>後述する「AIの限界」の代表例</li>
+</ul>
+
+<hr>
+
+<h2>今のAIでできること</h2>
+
+<h3>文章生成</h3>
+<ul>
+  <li>ビジネスメール、報告書、企画書の下書き</li>
+  <li>議事録の要約</li>
+  <li>多言語翻訳</li>
+</ul>
+
+<h3>画像生成</h3>
+<ul>
+  <li>テキストで指示するだけで写真のようなリアルな画像を生成</li>
+  <li>商品モックアップ、広告ビジュアル、プレゼン資料用イラスト</li>
+  <li>専門デザイナーなしでプロ級のビジュアル制作が可能に</li>
+</ul>
+
+<h3>コード生成</h3>
+<ul>
+  <li>Webサイト、業務アプリの開発支援</li>
+  <li>従来2〜3週間かかった開発が2〜3日に</li>
+  <li>非エンジニアでも修正・カスタマイズ可能に</li>
+</ul>
+
+<hr>
+
+<h3>実例：10秒で商品モックアップ</h3>
+
+<p>和歌山大学のロゴを用意し、AIに「このロゴを缶にプリントして商品写真風に」と指示。</p>
+
+<img src="./images/product-mockup-can.png" alt="商品モックアップ例">
+
+<p><strong>結果</strong>：約10秒で完成。そのまま営業資料・提案書に使用可能。</p>
+
+<table>
+  <tr><th>項目</th><th>従来の制作</th><th>AI活用</th></tr>
+  <tr><td>時間</td><td>3〜5日</td><td>数分</td></tr>
+  <tr><td>コスト</td><td>5〜10万円</td><td>ほぼ無料</td></tr>
+  <tr><td>修正</td><td>再依頼（追加費用）</td><td>その場で即修正</td></tr>
+  <tr><td>制作者</td><td>専門デザイナー</td><td>誰でも</td></tr>
+</table>
+
+<hr>
+
+<h2>主要プレイヤー（覚えなくていい）</h2>
+
+<p>競争が激化しており、毎月のように新モデルがリリースされています。名前を覚える必要はありませんが、「こんなに多くの会社が競っているのか」という感覚だけ持っておいてください。</p>
+
+<table>
+  <tr><th>企業</th><th>代表的なAI</th><th>特徴</th></tr>
+  <tr><td>OpenAI</td><td>ChatGPT, GPT-4</td><td>最も有名、汎用的</td></tr>
+  <tr><td>Google</td><td>Gemini</td><td>検索との統合</td></tr>
+  <tr><td>Anthropic</td><td>Claude</td><td>長文理解に強い</td></tr>
+  <tr><td>Meta</td><td>Llama</td><td>オープンソース</td></tr>
+  <tr><td>Microsoft</td><td>Copilot</td><td>Office製品と統合</td></tr>
+</table>
+
+<p>日本語対応も急速に進んでおり、どのサービスも実用レベルで日本語が使えます。</p>
+
+<hr>
+
+<h2>AIの限界・苦手なこと</h2>
+
+<p>AIは万能ではありません。以下の限界を理解しておくことが重要です。</p>
+
+<h3>ハルシネーション（幻覚）</h3>
+<ul>
+  <li>存在しない事実をもっともらしく語る</li>
+  <li>架空の論文、存在しない法律を引用することも</li>
+  <li><strong>対策</strong>：重要な情報は必ず裏取りする</li>
+</ul>
+
+<h3>リアルタイム情報がない</h3>
+<ul>
+  <li>学習データには期限がある（例：2024年1月まで）</li>
+  <li>「今日の天気」「最新ニュース」は基本的に答えられない</li>
+  <li><strong>対策</strong>：最新情報はWeb検索機能付きのAIを使う</li>
+</ul>
+
+<h3>計算・論理の限界</h3>
+<ul>
+  <li>複雑な計算は間違えることがある</li>
+  <li>長い推論チェーンで矛盾が生じることも</li>
+  <li><strong>対策</strong>：計算は電卓、論理は人間がチェック</li>
+</ul>
+
+<h3>文脈の忘却</h3>
+<ul>
+  <li>長い会話の途中で前の内容を忘れる</li>
+  <li><strong>対策</strong>：重要な前提は繰り返し伝える</li>
+</ul>
+
+<hr>
+
+<h2>「AIに仕事を奪われる？」</h2>
+
+<p>この質問はよく聞かれます。AIに聞いてみました。</p>
+
+<blockquote>
+  <p><strong>Q: AIは人間の仕事を奪いますか？</strong></p>
+  <p><strong>A（AIの回答）</strong>: 「奪う」というより「変える」が正確です。</p>
+  <p>歴史を見ると、ATMは銀行員を消滅させず、むしろ銀行の支店を増やしました。窓口業務が減った分、銀行員はより高度な相談業務にシフトしました。</p>
+  <p>AIも同様に、単純作業を代替する一方で、新しい役割を生み出すでしょう。消えるのは「仕事」ではなく「タスク」です。</p>
+</blockquote>
+
+<hr>
+
+<h2>AIと人間の役割分担</h2>
+
+<p>AIに聞いた「これからの役割分担」です。</p>
+
+<h3>AIが得意なこと</h3>
+<ul>
+  <li>大量のデータ処理・分析</li>
+  <li>定型的な文章・画像の生成</li>
+  <li>24時間365日の対応</li>
+  <li>多言語への即時翻訳</li>
+</ul>
+
+<h3>人間にしかできないこと</h3>
+<ul>
+  <li>「何をすべきか」の判断</li>
+  <li>文脈を踏まえた意思決定</li>
+  <li>創造的なアイデアの発想</li>
+  <li>信頼関係の構築</li>
+  <li>責任を取ること</li>
+</ul>
+
+<h3>これからのスキル</h3>
+
+<table>
+  <tr><th>従来</th><th>これから</th></tr>
+  <tr><td>情報を探す</td><td>情報を統合・判断する</td></tr>
+  <tr><td>作業を実行する</td><td>何を作るべきか考える</td></tr>
+  <tr><td>専門知識を暗記する</td><td>AIを使って知識を活用する</td></tr>
+</table>
+
+<p>「どう作るか」より「何を作るべきか」が問われる時代になります。</p>
+
+<hr>
+
+<h2>AI時代に必要な備え</h2>
+
+<p>技術は進化し続けます。ChatGPTの登場から2年で、AIの性能は数十倍に向上しました。この流れは止まりません。では、私たちは何を備えればいいのか。</p>
+
+<h3>1. マインドセット</h3>
+<p>まずは試してみる。アップデートの速度が早いので、最新のAIのできることを知るためにも、生活や仕事、趣味のサポートにAIを活用してみてください。</p>
+
+<h3>2. 情報の整理</h3>
+
+<p>AIは万能に見えますが、紙の書類は読めません。PDFやWordに変換されていても、スキャン画像のままでは大量の中身を理解できません。</p>
+
+<p>AIを生活や仕事に活かすには、情報が「AIに読める形」で整理されている必要があります。</p>
+
+<ul>
+  <li>家計簿：手書き帳簿 → 会計ソフト</li>
+  <li>売り上げ情報 → CRM/データベース</li>
+  <li>業務マニュアル：紙のファイル → 電子ドキュメント</li>
+  <li>社内ノウハウ：ベテランの頭の中 → 文書化</li>
+</ul>
+
+<p>デジタル化は、AI活用の「入場券」です。これがないと、どれだけAIが進化しても恩恵を受けられません。</p>
+
+<h3>3. 人：AIと人間をつなぐ役割</h3>
+
+<p>AIは勝手に動きません。「何をさせるか」を考え、指示を出し、結果を判断する人間が必要です。</p>
+
+<p>プログラミングができる必要はありません。しかし「AIに何ができるか」を理解し、「自分の仕事のどこに使えるか」を考えられる人材は不可欠です。</p>
+
+<hr>
+
+<h2>まとめ</h2>
+
+<ol>
+  <li><strong>生成AIは「創造する機械」</strong> — 分類から創造へ進化した</li>
+  <li><strong>2020年頃から急に賢くなった</strong> — スケーリング則の発見がきっかけ</li>
+  <li><strong>なぜ賢くなったかは、実は謎</strong> — でも使えることは証明済み</li>
+  <li><strong>できることは多いが、限界もある</strong> — ハルシネーションに注意</li>
+  <li><strong>仕事は「奪われる」より「変わる」</strong> — 人間の役割も変化する</li>
+  <li><strong>備えは3つ</strong> — マインドセット、情報の整理、人材</li>
+</ol>
+
+<hr>
+
+<p class="footer">経済69期 中村<br>この文章はClaude Codeで作成しました</p>
+
+</body>
+</html>
