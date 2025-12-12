@@ -5,9 +5,9 @@
 ## A-1. ボタンの色を変更
 
 ```
-kouro-lp/components/contact-section.tsx の送信ボタンの背景色を
-現在の黒（#0B0B0B）から緑（#1a5f2a）に変更してください。
-hover時は #15491f にしてください。
+kouro-lp/components/hero-section.tsx の「入会のご案内」ボタンの背景色を
+現在の黒（#0B0B0B）からオレンジ（#e8731a）に変更してください。
+hover時は #c55f14 にしてください。
 ```
 
 ---
