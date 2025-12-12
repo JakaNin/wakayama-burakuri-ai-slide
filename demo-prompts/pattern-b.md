@@ -44,7 +44,7 @@ Google Mapsの埋め込みを追加してください。
 
 iframe埋め込みコード:
 <iframe
-  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3301.7!2d135.1677!3d34.2264!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2z5ZKM5q2M5bGx5ZWG5bel5Lya6K2w5omA!5e0!3m2!1sja!2sjp!4v1"
+  src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1202.536859914836!2d135.17107985493357!3d34.22969394190098!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6000b2eaf3307a53%3A0x92fc03bf5826551!2z5ZKM5q2M5bGx5ZWG5bel5Lya6K2w5omA!5e0!3m2!1sja!2sus!4v1765550525280!5m2!1sja!2sus"
   width="100%"
   height="400"
   style="border:0;"
