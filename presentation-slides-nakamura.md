@@ -14,8 +14,6 @@
 - フルスタックエンジニアとして活躍
 - 2023年4月 和歌山支社を設立、技術リーダーに就任
 - 2025年6月〜 フリーランスエンジニアとして独立
-  - FastDOCTOR株式会社で開発業務
-  - 自社サービスも開発中
 
 **作成したサイト**
 kaze.jp / manyo-typing.com / sunyx.jp / juzutsunagi.jp / clean-connect.org
